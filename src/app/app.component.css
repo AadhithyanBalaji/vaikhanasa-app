@@ -1,0 +1,25 @@
+.main-container {
+  display: flex;
+  height: 94vh;
+  gap: 15px;
+}
+
+.data-container,
+.map-container {
+  flex-grow: 1;
+}
+
+.grid-container {
+  height: 63vh;
+}
+
+.map-container {
+  width: 50vw;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
