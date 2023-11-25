@@ -1,0 +1,45 @@
+.login-wrapper {
+  background-image: url("../../assets/images/svm.jpg");
+  height: calc(100vh - 113px);
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right;
+  position: absolute;
+  top: 56px;
+}
+
+.box {
+  width: 30vw;
+  position: absolute;
+  left: 10vw;
+  top: 34vh;
+}
+
+.creds-form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.actions-container {
+  display: flex;
+  padding: 15px;
+  gap: 15px;
+  justify-content: center;
+  flex-direction: column;
+}
+
+@media (max-width: 900px) {
+  .login-wrapper {
+    background-position: 57%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .box {
+    width: 78vw;
+    position: unset;
+  }
+}
