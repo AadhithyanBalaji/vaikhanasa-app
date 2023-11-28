@@ -6,26 +6,31 @@
                 <mat-card-content>
                     <h2>Welcome to Vaikhanasa app!</h2>
                     <div class="creds-form-container">
-                        <mat-form-field class="example-full-width">
+                        <mat-form-field class="example-full-width" *ngIf="!isOtpRequestSuccessful;else codeControl">
                             <input matInput placeholder="Username" [formControl]="loginForm.controls.phoneNumber">
                             <mat-icon color="primary" matSuffix>call</mat-icon>
+                            <span matTextPrefix>91&nbsp;-&nbsp;</span>
                         </mat-form-field>
-                        <mat-form-field class="example-full-width">
-                            <input matInput placeholder="Password" type="password"
-                                [formControl]="loginForm.controls.password">
-                            <mat-icon color="primary" matSuffix>lock</mat-icon>
-                        </mat-form-field>
+                        <ng-template #codeControl>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Password" type="password"
+                                    [formControl]="loginForm.controls.password">
+                                <mat-icon color="primary" matSuffix>lock</mat-icon>
+                            </mat-form-field>
+                        </ng-template>
                     </div>
-                    <div *ngIf="isAutoLogout" class="display: flex; justify-content: center">You have been logged out
-                        automatically due to inactivity!</div>
                 </mat-card-content>
                 <div class="actions-container">
-                    <button mat-raised-button color="primary" (click)="login()">Log in </button>
+                    <button mat-raised-button color="primary" id="sign-in-button"
+                        *ngIf="!isOtpRequestSuccessful;else verifyCodeTemplate" (click)="login()">Get OTP</button>
+                    <ng-template #verifyCodeTemplate>
+                        <button mat-raised-button color="primary" id="sign-in-button" (click)="verify()">Verify</button>
+                    </ng-template>
                     <div class="jm">
                         <button mat-button (click)="initiateNewAccount()">Create new account</button>
                         <button mat-button (click)="forgotPassword()">Forgot password</button>
                     </div>
-                    <div class="jm">
+                    <div class="jm" *ngIf="loading">
                         <mat-spinner [diameter]="30"></mat-spinner>
                     </div>
                 </div>
