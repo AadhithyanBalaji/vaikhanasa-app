@@ -21,10 +21,17 @@ body {
   justify-content: center;
 }
 
-.p-15{
+.p-15 {
   padding: 15px !important;
 }
 
-.w100{
+.w100 {
   width: 100%;
+}
+
+.form-fields-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  padding-top: 15px;
 }

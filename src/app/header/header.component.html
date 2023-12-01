@@ -1,5 +1,12 @@
-<p>
+<p *ngIf="authService.isAuthenticated">
     <mat-toolbar>
         <span>Vaikhanasa</span>
+        <span class="example-spacer"></span>
+        <button mat-button>Home</button>
+        <button mat-button>Matrimony</button>
+        <button mat-icon-button aria-label="Logout" (click)="logOut()">
+            <mat-icon>logout</mat-icon>
+        </button>
+
     </mat-toolbar>
 </p>

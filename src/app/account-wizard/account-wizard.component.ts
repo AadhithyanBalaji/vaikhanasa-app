@@ -3,6 +3,10 @@ import { StepperOrientation } from '@angular/cdk/stepper';
 import { Component } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Observable, map } from 'rxjs';
+import { User } from '../model/user.model';
+import { UserService } from '../shared/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-wizard',
@@ -11,20 +15,100 @@ import { Observable, map } from 'rxjs';
 })
 export class AccountWizardComponent {
   firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    dob: ['', Validators.required],
+    clanId: [],
+    relationShipStatus: [null, Validators.required],
   });
   secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    lat: [''],
+    lng: [''],
+    contactNumber: [''],
+    phoneNumber: ['', Validators.required],
+  });
+  thirdFormGroup = this._formBuilder.group({
+    userName: ['', Validators.required],
+    password: ['', Validators.required],
+    confirmPassword: ['', Validators.required],
   });
   isEditable = false;
   stepperOrientation: Observable<StepperOrientation>;
+  relationShipStatuses = [
+    { id: 1, name: 'Single' },
+    { id: 2, name: 'Married' },
+    { id: 3, name: 'Divorced' },
+    { id: 4, name: 'Separated' },
+    { id: 5, name: 'Widow' },
+  ];
 
+  clans = [
+    { id: 1, name: 'Kashyap' },
+    { id: 2, name: 'Atri' },
+    { id: 3, name: 'Bharadvaja' },
+    { id: 4, name: 'Bhrigu' },
+    { id: 5, name: 'Goutama' },
+    { id: 6, name: 'Vasishta' },
+    { id: 7, name: 'Vishwamitra' },
+  ];
   constructor(
-    private _formBuilder: FormBuilder,
-    breakpointObserver: BreakpointObserver
+    private readonly _formBuilder: FormBuilder,
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly userService: UserService,
+    private readonly snackBar: MatSnackBar,
+    private readonly router: Router
   ) {
-    this.stepperOrientation = breakpointObserver
+    this.stepperOrientation = this.breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
+
+  saveUser() {
+    if (
+      this.firstFormGroup.valid &&
+      this.secondFormGroup.valid &&
+      this.thirdFormGroup.valid
+    ) {
+      const f1 = this.firstFormGroup.value;
+      const f2 = this.secondFormGroup.value;
+      const f3 = this.thirdFormGroup.value;
+
+      var dateParts = f1.dob!.split('/');
+      if (dateParts?.length < 3) {
+        return;
+      }
+      var dateObject = new Date(
+        +dateParts[2],
+        +dateParts[1] - 1,
+        +dateParts[0]
+      );
+
+      const user: User = {
+        firstName: f1.firstName!,
+        lastName: f1.lastName!,
+        dob: dateObject,
+        clanId: f1.clanId!,
+        relationShipStatus: f1.relationShipStatus!,
+
+        userName: f3.userName!,
+        password: f3.password!,
+
+        address: {
+          lat: f2.lat!,
+          lng: '',
+        },
+        contactNumber: f2.contactNumber!,
+        phoneNumber: f2.phoneNumber!,
+      };
+
+      this.userService
+        .createUser(user)
+        .then((_) => {
+          this.router.navigate([`../..`]);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      this.snackBar.open('Errors found in data entered. Please check');
+    }
   }
 }
