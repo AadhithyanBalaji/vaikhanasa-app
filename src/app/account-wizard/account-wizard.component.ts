@@ -1,8 +1,20 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { Component } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
-import { Observable, map } from 'rxjs';
+import {
+  Validators,
+  FormBuilder,
+  AbstractControl,
+  AsyncValidatorFn,
+} from '@angular/forms';
+import {
+  Observable,
+  debounceTime,
+  distinctUntilChanged,
+  first,
+  map,
+  switchMap,
+} from 'rxjs';
 import { User } from '../model/user.model';
 import { UserService } from '../shared/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,7 +40,14 @@ export class AccountWizardComponent {
     phoneNumber: ['', Validators.required],
   });
   thirdFormGroup = this._formBuilder.group({
-    userName: ['', Validators.required],
+    userName: [
+      '',
+      {
+        validators: [Validators.required],
+        asyncValidators: [userNameValidator(this.userService)],
+        updateOn: 'change',
+      },
+    ],
     password: ['', Validators.required],
     confirmPassword: ['', Validators.required],
   });
@@ -99,16 +118,46 @@ export class AccountWizardComponent {
         },
         contactNumber: f2.contactNumber!,
         phoneNumber: f2.phoneNumber!,
+        isActive: false,
       };
-
-      this.userService
-        .createUser(user)
-        .then((_) => {
-          this.router.navigate([`../..`]);
-        })
-        .catch((err) => console.log(err));
+      this.createUserAccount(user);
     } else {
       this.snackBar.open('Errors found in data entered. Please check');
     }
   }
+
+  createUserAccount(user: User) {
+    this.userService
+      .createUser(user)
+      .then((_) => {
+        this.router.navigate([`../..`]);
+      })
+      .catch((err) => console.log(err));
+  }
+}
+
+export function userNameValidator(userService: UserService): AsyncValidatorFn {
+  return (control: AbstractControl): any => {
+    return control.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((userName) =>
+        userService
+          .getUserByName(userName)
+          .then(
+            (fbUser) =>
+              fbUser === null || fbUser === undefined || fbUser.length === 0
+          )
+          .catch(() => false)
+      ),
+      map((isValid: boolean) =>
+        isValid
+          ? null
+          : {
+              duplicateUser: true,
+            }
+      ),
+      first()
+    );
+  };
 }

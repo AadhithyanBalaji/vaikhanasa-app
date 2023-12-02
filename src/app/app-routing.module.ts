@@ -8,25 +8,13 @@ import { AccountWizardComponent } from './account-wizard/account-wizard.componen
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'user/:id', component: AccountWizardComponent },
   {
     path: '',
     component: HomeComponent,
     canActivate: [AuthGuard],
-    children: [
-      { path: 'matrimony', component: MatchmakingWizardComponent },
-      { path: 'user/:id', component: AccountWizardComponent },
-    ],
+    children: [{ path: 'matrimony', component: MatchmakingWizardComponent }],
   },
-  // {
-  //   path: 'matrimony',
-  //   canActivate: [AuthGuard],
-  //   component: MatchmakingWizardComponent,
-  // },
-  // {
-  //   path: 'user/:id',
-  //   canActivate: [AuthGuard],
-  //   component: AccountWizardComponent,
-  // },
 ];
 
 @NgModule({

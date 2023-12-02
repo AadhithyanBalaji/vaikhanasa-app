@@ -1,89 +1,102 @@
-<div class="p-15">
-    <h3>Please provide the following information to create your account</h3>
-    <mat-stepper linear #stepper labelPosition="bottom" [orientation]="'vertical'">
-        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
-            <div>
-                <form [formGroup]="firstFormGroup">
-                    <ng-template matStepLabel>Fill out your personal info</ng-template>
-                    <div class="form-fields-container">
-                        <mat-form-field>
-                            <mat-label>First name</mat-label>
-                            <input matInput formControlName="firstName" placeholder="First name" required>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>Last name</mat-label>
-                            <input matInput formControlName="lastName" placeholder="First name" required>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>DoB</mat-label>
-                            <input matInput formControlName="dob" placeholder="dd/mm/yyyy" required>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>Gothram</mat-label>
-                            <mat-select formControlName="clanId" name="clan" required>
-                                <mat-option *ngFor="let clan of clans" [value]="clan.id">{{clan.name}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>Relationship Status</mat-label>
-                            <mat-select formControlName="relationShipStatus" name="relationShipStatus" required>
-                                <mat-option *ngFor="let status of relationShipStatuses"
-                                    [value]="status.id">{{status.name}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+<div>
+    <app-header></app-header>
+    <div class="main-content">
+        <div class="p-15">
+            <h3>Please provide the following information to create your account</h3>
+            <mat-stepper linear #stepper labelPosition="bottom" [orientation]="'vertical'">
+                <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+                    <div>
+                        <form [formGroup]="firstFormGroup">
+                            <ng-template matStepLabel>Fill out your personal info</ng-template>
+                            <div class="form-fields-container">
+                                <mat-form-field>
+                                    <mat-label>First name</mat-label>
+                                    <input matInput formControlName="firstName" placeholder="First name" required>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Last name</mat-label>
+                                    <input matInput formControlName="lastName" placeholder="First name" required>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>DoB</mat-label>
+                                    <input matInput formControlName="dob" placeholder="dd/mm/yyyy" required>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Gothram</mat-label>
+                                    <mat-select formControlName="clanId" name="clan" required>
+                                        <mat-option *ngFor="let clan of clans"
+                                            [value]="clan.id">{{clan.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Relationship Status</mat-label>
+                                    <mat-select formControlName="relationShipStatus" name="relationShipStatus" required>
+                                        <mat-option *ngFor="let status of relationShipStatuses"
+                                            [value]="status.id">{{status.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </div>
-            <div>
-                <button mat-button matStepperNext>Next</button>
-            </div>
-        </mat-step>
-        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
-            <form [formGroup]="secondFormGroup">
-                <ng-template matStepLabel>Fill out your address</ng-template>
-                <div class="form-fields-container">
-                    <mat-form-field>
-                        <mat-label>Address</mat-label>
-                        <input matInput formControlName="lat" placeholder="Ex. 1 Main St, New York, NY" required>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Phone number</mat-label>
-                        <input matInput formControlName="phoneNumber" required>
-                    </mat-form-field>
-                    <mat-form-field *ngIf="firstFormGroup.controls?.relationShipStatus?.value! === 1">
-                        <mat-label>Contact Number for Matrimony</mat-label>
-                        <input matInput formControlName="contactNumber" required>
-                    </mat-form-field>
-                </div>
-                <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                    <button mat-button matStepperNext>Next</button>
-                </div>
-            </form>
-        </mat-step>
-        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
-            <form [formGroup]="thirdFormGroup">
-                <ng-template matStepLabel>Login Info</ng-template>
-                <div class="form-fields-container">
-                    <mat-form-field>
-                        <mat-label>Username</mat-label>
-                        <input matInput formControlName="userName" placeholder="Used to login into the application"
-                            required>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Password</mat-label>
-                        <input matInput formControlName="password" required>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>Confirm Password</mat-label>
-                        <input matInput formControlName="confirmPassword" required>
-                    </mat-form-field>
-                </div>
-                <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                    <button mat-button matStepperNext (click)="saveUser()">Save</button>
-                </div>
-            </form>
-        </mat-step>
-    </mat-stepper>
+                    <div>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+                <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+                    <form [formGroup]="secondFormGroup">
+                        <ng-template matStepLabel>Fill out your address</ng-template>
+                        <div class="form-fields-container">
+                            <mat-form-field>
+                                <mat-label>Address</mat-label>
+                                <input matInput formControlName="lat" placeholder="Ex. 1 Main St, New York, NY"
+                                    required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Phone number</mat-label>
+                                <input matInput formControlName="phoneNumber" required>
+                            </mat-form-field>
+                            <mat-form-field *ngIf="firstFormGroup.controls?.relationShipStatus?.value! === 1">
+                                <mat-label>Contact Number for Matrimony</mat-label>
+                                <input matInput formControlName="contactNumber" required>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
+                    <form [formGroup]="thirdFormGroup">
+                        <ng-template matStepLabel>Login Info</ng-template>
+                        <div class="form-fields-container">
+                            <mat-form-field>
+                                <mat-label>Username</mat-label>
+                                <input matInput formControlName="userName"
+                                    placeholder="Used to login into the application" required>
+                                <mat-error *ngIf="thirdFormGroup.controls.userName.hasError('duplicateUser')">User name
+                                    already exists</mat-error>
+                                <mat-icon *ngIf="thirdFormGroup.controls.userName.dirty 
+                                    && !thirdFormGroup.controls.userName.pending 
+                                    && thirdFormGroup.controls.userName.valid" matSuffix style="color: green">check_circle</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Password</mat-label>
+                                <input matInput formControlName="password" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Confirm Password</mat-label>
+                                <input matInput formControlName="confirmPassword" required>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext (click)="saveUser()">Save</button>
+                        </div>
+                    </form>
+                </mat-step>
+            </mat-stepper>
+        </div>
+    </div>
+    <app-footer></app-footer>
 </div>

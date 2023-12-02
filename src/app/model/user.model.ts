@@ -13,4 +13,6 @@ export class User {
   address!: AddressInfo;
   contactNumber!: string;
   phoneNumber!: string;
+
+  isActive!: boolean;
 }
