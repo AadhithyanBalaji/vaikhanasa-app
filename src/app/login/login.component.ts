@@ -67,8 +67,7 @@ export class LoginComponent {
     this.firebaseService.getUserByName(userName).then((savedUser) => {
       savedUser = savedUser!;
       if (savedUser.password === password) {
-        const userCache = new UserCache(true, savedUser.userName);
-        this.authService.loggedInUserInfo = userCache;
+        this.authService.login(savedUser);
         this.snackBarService.open(
           `Welcome ${savedUser.firstName} ${savedUser.lastName}!`
         );

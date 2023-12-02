@@ -15,4 +15,5 @@ export class User {
   phoneNumber!: string;
 
   isActive!: boolean;
+  isAdmin: boolean = false;
 }

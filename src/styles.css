@@ -35,3 +35,7 @@ body {
   flex-wrap: wrap;
   padding-top: 15px;
 }
+
+.active-link {
+  background-color: gray !important;
+}

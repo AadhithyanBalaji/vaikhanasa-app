@@ -3,46 +3,43 @@
     <div class="main-content">
         <div class="p-15">
             <h3>Please provide the following information to create your account</h3>
-            <mat-stepper linear #stepper labelPosition="bottom" [orientation]="'vertical'">
-                <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
-                    <div>
-                        <form [formGroup]="firstFormGroup">
-                            <ng-template matStepLabel>Fill out your personal info</ng-template>
-                            <div class="form-fields-container">
-                                <mat-form-field>
-                                    <mat-label>First name</mat-label>
-                                    <input matInput formControlName="firstName" placeholder="First name" required>
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <mat-label>Last name</mat-label>
-                                    <input matInput formControlName="lastName" placeholder="First name" required>
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <mat-label>DoB</mat-label>
-                                    <input matInput formControlName="dob" placeholder="dd/mm/yyyy" required>
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <mat-label>Gothram</mat-label>
-                                    <mat-select formControlName="clanId" name="clan" required>
-                                        <mat-option *ngFor="let clan of clans"
-                                            [value]="clan.id">{{clan.name}}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <mat-label>Relationship Status</mat-label>
-                                    <mat-select formControlName="relationShipStatus" name="relationShipStatus" required>
-                                        <mat-option *ngFor="let status of relationShipStatuses"
-                                            [value]="status.id">{{status.name}}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                        </form>
-                    </div>
-                    <div>
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
+            <mat-stepper #stepper [orientation]="'vertical'">
+                <mat-step [stepControl]="firstFormGroup" errorMessage="Missing/Invalid in information provided">
+                    <form [formGroup]="firstFormGroup">
+                        <ng-template matStepLabel>Fill out your personal info</ng-template>
+                        <div class="form-fields-container">
+                            <mat-form-field>
+                                <mat-label>First name</mat-label>
+                                <input matInput formControlName="firstName" placeholder="First name" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Last name</mat-label>
+                                <input matInput formControlName="lastName" placeholder="First name" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>DoB</mat-label>
+                                <input matInput formControlName="dob" placeholder="dd/mm/yyyy" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Gothram</mat-label>
+                                <mat-select formControlName="clanId" name="clan" required>
+                                    <mat-option *ngFor="let clan of clans" [value]="clan.id">{{clan.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Relationship Status</mat-label>
+                                <mat-select formControlName="relationShipStatus" name="relationShipStatus" required>
+                                    <mat-option *ngFor="let status of relationShipStatuses"
+                                        [value]="status.id">{{status.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
                 </mat-step>
-                <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+                <mat-step [stepControl]="secondFormGroup" errorMessage="Missing/Invalid in information provided">
                     <form [formGroup]="secondFormGroup">
                         <ng-template matStepLabel>Fill out your address</ng-template>
                         <div class="form-fields-container">
@@ -66,7 +63,7 @@
                         </div>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
+                <mat-step [stepControl]="thirdFormGroup" errorMessage="Missing/Invalid in information provided">
                     <form [formGroup]="thirdFormGroup">
                         <ng-template matStepLabel>Login Info</ng-template>
                         <div class="form-fields-container">
@@ -78,7 +75,8 @@
                                     already exists</mat-error>
                                 <mat-icon *ngIf="thirdFormGroup.controls.userName.dirty 
                                     && !thirdFormGroup.controls.userName.pending 
-                                    && thirdFormGroup.controls.userName.valid" matSuffix style="color: green">check_circle</mat-icon>
+                                    && thirdFormGroup.controls.userName.valid" matSuffix
+                                    style="color: green">check_circle</mat-icon>
                             </mat-form-field>
                             <mat-form-field>
                                 <mat-label>Password</mat-label>

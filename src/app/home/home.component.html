@@ -1,7 +1,155 @@
-<div>
-    <app-header></app-header>
-    <div class="main-content">
-        <router-outlet></router-outlet>
-    </div>
-    <app-footer></app-footer>
+<div class="home-grid-list-container">
+    <mat-grid-list cols="4" rowHeight="40vh" gutterSize="15px">
+        <mat-grid-tile [colspan]="gridRows[0][0]" [rowspan]="gridRows[0][1]">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>News</mat-card-title>
+                    <mat-card-subtitle>Latest information and headlines from the community</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="news-container">
+                        <mat-list class="example-list-wrapping">
+                            <mat-list-item lines="3">
+                                <span matListItemTitle>Title</span>
+                                <mat-icon matListItemIcon>note</mat-icon>
+                                <span>Secondary line that will wrap because the list lines is explicitly set to 3 lines.
+                                    Text
+                                    inside of a `matListItemTitle` or `matListItemLine` will never wrap.
+                                </span>
+                            </mat-list-item>
+                            <mat-list-item lines="3">
+                                <span matListItemTitle>Title</span>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                in
+                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat
+                                non proident, sunt in culpa qui officia deserunt mollit anim id est
+                            </mat-list-item>
+                            <mat-list-item lines="3">
+                                <span matListItemTitle>Title</span>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                in
+                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat
+                                non proident, sunt in culpa qui officia deserunt mollit anim id est
+                            </mat-list-item>
+                            <mat-list-item lines="3">
+                                <span matListItemTitle>Title</span>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco
+                                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+                                in
+                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat
+                                non proident, sunt in culpa qui officia deserunt mollit anim id est
+                            </mat-list-item>
+                        </mat-list>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridRows[1][0]" [rowspan]="gridRows[1][1]">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Useful resources</mat-card-title>
+                    <mat-card-subtitle>Relevant content for consumption</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="useful-resources-container"
+                        [ngStyle]="{ 'max-height': (isMobile|async) ? '27vh' : '74vh'}">
+                        <mat-list>
+                            <div mat-subheader>Folders</div>
+                            <mat-list-item *ngFor="let folder of folders">
+                                <mat-icon matListItemIcon>folder</mat-icon>
+                                <div matListItemTitle>{{folder.name}}</div>
+                                <div matListItemLine>{{folder.updated | date}}</div>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <div mat-subheader>Notes</div>
+                            <mat-list-item *ngFor="let note of notes">
+                                <mat-icon matListItemIcon>receipt_long</mat-icon>
+                                <div matListItemTitle>{{note.name}}</div>
+                                <div matListItemLine>{{note.updated | date}}</div>
+                            </mat-list-item>
+                        </mat-list>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridRows[2][0]" [rowspan]="gridRows[2][1]">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Community metrics</mat-card-title>
+                    <mat-card-subtitle>Details of our community</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="community-metrics-container">
+                        <mat-list role="list">
+                            <mat-list-item role="listitem">
+                                <mat-icon matListItemIcon>groups</mat-icon>
+                                <div matListItemTitle>Total strength</div>
+                                <div matListItemLine>{{19939 | number}}</div>
+                                <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <mat-icon matListItemIcon>elderly</mat-icon>
+                                <div matListItemTitle>Elders</div>
+                                <div matListItemLine>{{5239 | number}}</div>
+                                <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <mat-icon matListItemIcon>family_restroom</mat-icon>
+                                <div matListItemTitle>Families</div>
+                                <div matListItemLine>{{640 | number}}</div>
+                                <mat-progress-bar mode="determinate" value="22"></mat-progress-bar>
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <mat-icon matListItemIcon>accessibility_new</mat-icon>
+                                <div matListItemTitle>Eligible singles</div>
+                                <div matListItemLine>{{1200 | number}}</div>
+                                <mat-progress-bar mode="determinate" value="60"></mat-progress-bar>
+                            </mat-list-item>
+                        </mat-list>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="gridRows[3][0]" [rowspan]="gridRows[3][1]">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Featured content</mat-card-title>
+                    <mat-card-subtitle>Learn more about our celebrated person/event of this month</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="featured-content-container">
+                        <div class="event-img">
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div>
+                            <mat-list role="list">
+                                <mat-list-item role="listitem">Brahmotsavam</mat-list-item>
+                                <mat-list-item role="listitem">
+                                    <mat-icon matListItemIcon>event</mat-icon>
+                                    {{ eventDate | date}}</mat-list-item>
+                                <mat-list-item role="listitem">
+                                    <mat-icon matListItemIcon>pin_drop</mat-icon>
+                                    Tirupati, Andhra Pradesh, India
+                                </mat-list-item>
+                            </mat-list>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
 </div>

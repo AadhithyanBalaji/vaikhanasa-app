@@ -1,9 +1,12 @@
 <p *ngIf="authService.isAuthenticated; else anonymousHeader">
-    <mat-toolbar *ngIf="!(isMobile | async); else mobileToolbarTemplate">
+    <mat-toolbar class="desktop-toolbar" *ngIf="!(isMobile | async); else mobileToolbarTemplate">
         <span>Vaikhanasa</span>
         <span class="example-spacer"></span>
-        <button mat-button>Home</button>
-        <button mat-button>Matrimony</button>
+        <a mat-button routerLink="/home" routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <button mat-button routerLink="matrimony" routerLinkActive="active-link">Matrimony</button>
+        <button mat-button *ngIf="isAdmin" [matMenuTriggerFor]="adminMenu" aria-label="header menu options">Admin
+        </button>
         <button mat-fab extended color="primary">
             <mat-icon>account_circle</mat-icon>
             <span *ngIf="displayName; else userNameLoadingTemplate">{{displayName}}</span>
@@ -12,6 +15,11 @@
         <button mat-icon-button aria-label="Logout" (click)="logOut()">
             <mat-icon>logout</mat-icon>
         </button>
+        <mat-menu #adminMenu="matMenu">
+            <ng-template matMenuContent>
+                <a mat-menu-item routerLink="users" routerLinkActive="active-link"> User Management </a>
+            </ng-template>
+        </mat-menu>
     </mat-toolbar>
 </p>
 <ng-template #anonymousHeader>
@@ -35,6 +43,10 @@
             <button mat-menu-item>
                 <span>Matrimony</span>
             </button>
+            <button *ngIf="isAdmin" mat-menu-item [matMenuTriggerFor]="adminMenu" aria-label="header menu options">
+                <mat-icon>shield_lock</mat-icon>
+                <span>Admin</span>
+            </button>
             <button mat-menu-item>
                 <mat-icon>account_circle</mat-icon>
                 <span *ngIf="displayName; else userNameLoadingTemplate">{{displayName}}</span>
@@ -43,6 +55,12 @@
             <button mat-menu-item aria-label="Logout" (click)="logOut()">
                 <mat-icon>logout</mat-icon>
                 <span>Logout</span>
+            </button>
+        </mat-menu>
+
+        <mat-menu #adminMenu="matMenu">
+            <button mat-menu-item>
+                <span>User Management</span>
             </button>
         </mat-menu>
 

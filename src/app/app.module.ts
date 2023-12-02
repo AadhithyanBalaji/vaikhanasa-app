@@ -19,6 +19,8 @@ import { FooterComponent } from './footer/footer.component';
 import { environment } from 'src/environments/environments';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { UsersBrowserComponent } from './admin/users-browser/users-browser.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
     HomeComponent,
     HeaderComponent,
     FooterComponent,
+    UsersBrowserComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

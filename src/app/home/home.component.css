@@ -1,0 +1,36 @@
+.home-grid-list-container {
+  padding: 15px;
+  background-color: gray;
+  max-height: calc(100vh - 151px);
+  overflow: auto;
+}
+
+mat-card {
+  height: 99%;
+  width: 99%;
+}
+
+mat-card-content div {
+  overflow: auto;
+  max-height: 27vh;
+}
+
+.news-container {
+  overflow: auto;
+  max-height: 27vh;
+  border: 2px solid gray;
+  border-radius: 7px;
+  margin-top: 15px;
+}
+
+.featured-content-container {
+  display: flex;
+}
+
+.event-img {
+  background-image: url("../../assets/images/tirupati.jpeg");
+  background-repeat: no-repeat;
+  width: 54vw;
+  height: 30vh;
+  background-position: 50% 26%;
+}

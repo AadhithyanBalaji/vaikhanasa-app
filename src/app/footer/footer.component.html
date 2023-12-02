@@ -2,11 +2,10 @@
 width: 100vw;
 bottom: -10px;">
     <mat-toolbar>
-        <div class="footer-content jm w100">
+        <div class="footer-content jm w100" [ngClass]="(isMobile | async) ? 'm-footer':'d-footer'">
             <h4>Contact : <a href="javascript:void()" click="mailto:vaikhanasa@gmail.com">vaikhanasa@gmail.com</a></h4>
-            <h4>&nbsp;|&nbsp;</h4>
+            <h4 *ngIf="!(isMobile | async)">&nbsp;|&nbsp;</h4>
             <h4> Ph : 9711337903</h4>
         </div>
-
     </mat-toolbar>
 </p>

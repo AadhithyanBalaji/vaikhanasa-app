@@ -1,3 +1,7 @@
 export class UserCache {
-  constructor(public isAuthenticated = false, public userName: string = '') {}
+  constructor(
+    public userName: string = '',
+    public isAuthenticated = false,
+    public isAdmin = false
+  ) {}
 }

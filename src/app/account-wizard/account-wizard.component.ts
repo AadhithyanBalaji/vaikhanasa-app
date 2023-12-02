@@ -1,26 +1,35 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { StepperOrientation } from '@angular/cdk/stepper';
-import { Component } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
-import { Observable, map } from 'rxjs';
+import {
+  STEPPER_GLOBAL_OPTIONS,
+  StepperOrientation,
+} from '@angular/cdk/stepper';
+import { Component, OnInit } from '@angular/core';
+import { Validators, FormBuilder, FormControl } from '@angular/forms';
+import { Observable, map, of } from 'rxjs';
 import { User } from '../model/user.model';
 import { UserService } from '../shared/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidators } from '../helpers/form-validators';
 
 @Component({
   selector: 'app-account-wizard',
   templateUrl: './account-wizard.component.html',
   styleUrls: ['./account-wizard.component.css'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true },
+    },
+  ],
 })
-export class AccountWizardComponent {
+export class AccountWizardComponent implements OnInit {
   firstFormGroup = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     dob: ['', Validators.required],
-    clanId: [],
-    relationShipStatus: [null, Validators.required],
+    clanId: new FormControl(),
+    relationShipStatus: new FormControl(NaN, Validators.required),
   });
   secondFormGroup = this._formBuilder.group({
     lat: [''],
@@ -33,15 +42,14 @@ export class AccountWizardComponent {
       '',
       {
         validators: [Validators.required],
-        asyncValidators: [FormValidators.userNameValidator(this.userService)],
         updateOn: 'change',
       },
     ],
     password: ['', Validators.required],
     confirmPassword: ['', Validators.required],
   });
-  isEditable = false;
-  stepperOrientation: Observable<StepperOrientation>;
+  isEditable = true;
+  stepperOrientation: Observable<StepperOrientation> = of('vertical');
   relationShipStatuses = [
     { id: 1, name: 'Single' },
     { id: 2, name: 'Married' },
@@ -59,16 +67,25 @@ export class AccountWizardComponent {
     { id: 6, name: 'Vasishta' },
     { id: 7, name: 'Vishwamitra' },
   ];
+  userName: any;
   constructor(
     private readonly _formBuilder: FormBuilder,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly userService: UserService,
     private readonly snackBar: MatSnackBar,
-    private readonly router: Router
-  ) {
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
     this.stepperOrientation = this.breakpointObserver
       .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+
+    this.route.params.subscribe((params) => {
+      const userName = params['id'];
+      this.buildForm(userName);
+    });
   }
 
   saveUser() {
@@ -108,6 +125,7 @@ export class AccountWizardComponent {
         contactNumber: f2.contactNumber!,
         phoneNumber: f2.phoneNumber!,
         isActive: false,
+        isAdmin: false,
       };
       this.createUserAccount(user);
     } else {
@@ -115,7 +133,43 @@ export class AccountWizardComponent {
     }
   }
 
-  createUserAccount(user: User) {
+  private buildForm(userName: string) {
+    this.thirdFormGroup.controls.userName.setValue(userName);
+    if (!this.thirdFormGroup.controls.userName.errors) {
+      this.userService.getUserByName(userName).then((savedUser) => {
+        if (savedUser == null) {
+          return;
+        }
+        savedUser = savedUser!;
+        this.firstFormGroup.patchValue({
+          firstName: savedUser.firstName,
+          lastName: savedUser.lastName,
+          dob: savedUser.dob.toString(),
+          clanId: +savedUser.clanId,
+          relationShipStatus: savedUser.relationShipStatus,
+        });
+
+        this.secondFormGroup.patchValue({
+          lat: savedUser?.address?.lat,
+          lng: savedUser.address?.lng,
+          contactNumber: savedUser.contactNumber,
+          phoneNumber: savedUser.contactNumber,
+        });
+
+        this.thirdFormGroup.patchValue({
+          userName: savedUser.userName,
+          password: savedUser.password,
+          confirmPassword: savedUser.password,
+        });
+      });
+    } else {
+      this.thirdFormGroup.controls.userName.setAsyncValidators(
+        FormValidators.userNameValidator(this.userService)
+      );
+    }
+  }
+
+  private createUserAccount(user: User) {
     this.userService
       .createUser(user)
       .then((_) => {

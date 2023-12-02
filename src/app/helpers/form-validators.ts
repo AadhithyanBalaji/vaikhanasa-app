@@ -49,10 +49,13 @@ export class FormValidators {
           const formUserName = formGroup.value.userName;
           const formPassword = formGroup.value.password;
           if (
-            fbUser?.userName === formUserName &&
-            fbUser?.password === formPassword
+            fbUser?.isActive == null ||
+            fbUser?.isActive == undefined ||
+            fbUser?.isActive == false
           ) {
-            return null;
+            return {
+              userInActive: true,
+            };
           } else if (fbUser === null) {
             return {
               doesNotExist: true,
@@ -64,6 +67,11 @@ export class FormValidators {
             return {
               invalidPassword: true,
             };
+          } else if (
+            fbUser?.userName === formUserName &&
+            fbUser?.password === formPassword
+          ) {
+            return null;
           } else {
             alert('Unknown error occurred! Check with support');
             return null;

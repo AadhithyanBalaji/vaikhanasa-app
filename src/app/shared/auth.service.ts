@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserCache } from './user-cache.model';
+import { User } from '../model/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -7,9 +8,21 @@ import { UserCache } from './user-cache.model';
 export class AuthService {
   private readonly sAuthenticatedKey = 'userInfo';
 
+  public login(savedUser: User) {
+    const userCache = new UserCache(
+      savedUser.userName,
+      true,
+      savedUser?.isAdmin ?? false
+    );
+    this.loggedInUserInfo = userCache;
+  }
+
   public get isAuthenticated() {
-    const userInfo = this.loggedInUserInfo;
-    return userInfo.isAuthenticated;
+    return this.loggedInUserInfo.isAuthenticated;
+  }
+
+  public get isAdmin() {
+    return this.loggedInUserInfo.isAdmin;
   }
 
   public set loggedInUserInfo(user: UserCache) {
@@ -23,5 +36,10 @@ export class AuthService {
       userInfoJson == ''
       ? new UserCache()
       : (JSON.parse(userInfoJson) as UserCache);
+  }
+
+  public logout() {
+    const userCache = new UserCache();
+    this.loggedInUserInfo = userCache;
   }
 }

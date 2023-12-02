@@ -19,6 +19,8 @@
                             does not exist</mat-error>
                         <mat-error *ngIf="loginForm.hasError('invalidPassword')">User name / Password
                             is incorrect</mat-error>
+                        <mat-error *ngIf="loginForm.hasError('userInActive')">User account has not yet been activated.
+                            Please contact support</mat-error>
                     </div>
                 </mat-card-content>
                 <div class="actions-container">

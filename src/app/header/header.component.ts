@@ -5,6 +5,7 @@ import { UserCache } from '../shared/user-cache.model';
 import { UserService } from '../shared/user.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Observable, map } from 'rxjs';
+import { ViewPortService } from '../shared/viewport.service';
 
 @Component({
   selector: 'app-header',
@@ -14,16 +15,15 @@ import { Observable, map } from 'rxjs';
 export class HeaderComponent implements OnInit {
   displayName: string = '';
   isMobile: Observable<boolean>;
+  isAdmin: boolean = false;
 
   constructor(
     readonly authService: AuthService,
     private readonly router: Router,
     private readonly userService: UserService,
-    private readonly breakpointObserver: BreakpointObserver
+    private readonly viewportService: ViewPortService
   ) {
-    this.isMobile = this.breakpointObserver
-      .observe('(max-width: 800px)')
-      .pipe(map(({ matches }) => matches));
+    this.isMobile = this.viewportService.isMobile;
   }
 
   ngOnInit(): void {
@@ -32,12 +32,12 @@ export class HeaderComponent implements OnInit {
       this.displayName = loggedInUser
         ? `${loggedInUser.firstName} ${loggedInUser.lastName}`
         : '';
+      this.isAdmin = loggedInUser?.isAdmin ?? false;
     });
   }
 
   logOut() {
-    const userCache = new UserCache(false, '');
-    this.authService.loggedInUserInfo = userCache;
+    this.authService.logout();
     this.router.navigate(['login']);
   }
 }
