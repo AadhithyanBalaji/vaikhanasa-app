@@ -1,13 +1,17 @@
 <p *ngIf="authService.isAuthenticated; else anonymousHeader">
-    <mat-toolbar>
+    <mat-toolbar *ngIf="!(isMobile | async); else mobileToolbarTemplate">
         <span>Vaikhanasa</span>
         <span class="example-spacer"></span>
         <button mat-button>Home</button>
         <button mat-button>Matrimony</button>
+        <button mat-fab extended color="primary">
+            <mat-icon>account_circle</mat-icon>
+            <span *ngIf="displayName; else userNameLoadingTemplate">{{displayName}}</span>
+            <ng-template #userNameLoadingTemplate>...</ng-template>
+        </button>
         <button mat-icon-button aria-label="Logout" (click)="logOut()">
             <mat-icon>logout</mat-icon>
         </button>
-
     </mat-toolbar>
 </p>
 <ng-template #anonymousHeader>
@@ -16,4 +20,31 @@
             <span>Vaikhanasa</span>
         </mat-toolbar>
     </p>
+</ng-template>
+<ng-template #mobileToolbarTemplate>
+    <mat-toolbar>
+        <span>Vaikhanasa</span>
+        <span class="example-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="header menu options">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+                <span>Home</span>
+            </button>
+            <button mat-menu-item>
+                <span>Matrimony</span>
+            </button>
+            <button mat-menu-item>
+                <mat-icon>account_circle</mat-icon>
+                <span *ngIf="displayName; else userNameLoadingTemplate">{{displayName}}</span>
+                <ng-template #userNameLoadingTemplate>...</ng-template>
+            </button>
+            <button mat-menu-item aria-label="Logout" (click)="logOut()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+            </button>
+        </mat-menu>
+
+    </mat-toolbar>
 </ng-template>

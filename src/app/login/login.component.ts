@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../shared/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { User } from '../model/user.model';
 import { AuthService } from '../shared/auth.service';
+import { UserCache } from '../shared/user-cache.model';
+import { FormValidators } from '../helpers/form-validators';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -13,12 +15,14 @@ import { AuthService } from '../shared/auth.service';
 })
 export class LoginComponent {
   loginForm = new FormGroup({
-    userName: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.maxLength(20),
-    ]),
+    userName: new FormControl('', {
+      validators: [Validators.required],
+      updateOn: 'submit',
+    }),
+    password: new FormControl('', {
+      validators: [Validators.required, Validators.maxLength(20)],
+      updateOn: 'submit',
+    }),
   });
   isAutoLogout = false;
   loading = false;
@@ -27,31 +31,24 @@ export class LoginComponent {
     private readonly router: Router,
     private readonly firebaseService: UserService,
     private readonly snackBarService: MatSnackBar,
-    private readonly authService: AuthService
-  ) {}
-
-  login() {
-    if (this.loginForm.dirty && this.loginForm.valid) {
-      const userName = this.loginForm.controls.userName.value!;
-      const password = this.loginForm.controls.password.value!;
-      this.loading = true;
-      this.firebaseService.getUserByName(userName).then((data) => {
-        if (data !== null && data !== undefined && data.length > 0) {
-          const savedUser = data[0] as User;
-          if (savedUser.password === password) {
-            this.authService.isAuthenticated = true;
-            this.snackBarService.open(
-              `Welcome ${savedUser.firstName} ${savedUser.lastName}!`
-            );
-            this.router.navigate([`../`]);
-          } else {
-            this.snackBarService.open('Check user name/password');
-          }
-        }
+    private readonly authService: AuthService,
+    private readonly userService: UserService
+  ) {
+    this.loginForm.addAsyncValidators([
+      FormValidators.userNameExists(this.userService),
+    ]);
+    this.loginForm.updateValueAndValidity();
+    this.loginForm.statusChanges
+      .pipe(distinctUntilChanged())
+      .subscribe((status) => {
+        status === 'VALID' ? this.submitForm() : null;
         this.loading = false;
       });
-    }
-    return false;
+  }
+
+  login() {
+    this.loading = true;
+    return this.loginForm.dirty && this.loginForm.valid;
   }
 
   initiateNewAccount() {
@@ -60,5 +57,24 @@ export class LoginComponent {
 
   forgotPassword() {
     alert('to do: navigate to reset password');
+  }
+
+  private submitForm() {
+    this.loading = true;
+    const userName = this.loginForm.controls.userName.value!;
+    const password = this.loginForm.controls.password.value!;
+    this.loading = true;
+    this.firebaseService.getUserByName(userName).then((savedUser) => {
+      savedUser = savedUser!;
+      if (savedUser.password === password) {
+        const userCache = new UserCache(true, savedUser.userName);
+        this.authService.loggedInUserInfo = userCache;
+        this.snackBarService.open(
+          `Welcome ${savedUser.firstName} ${savedUser.lastName}!`
+        );
+        this.router.navigate([`../`]);
+      }
+      this.loading = false;
+    });
   }
 }

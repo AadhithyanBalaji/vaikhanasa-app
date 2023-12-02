@@ -1,24 +1,13 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { Component } from '@angular/core';
-import {
-  Validators,
-  FormBuilder,
-  AbstractControl,
-  AsyncValidatorFn,
-} from '@angular/forms';
-import {
-  Observable,
-  debounceTime,
-  distinctUntilChanged,
-  first,
-  map,
-  switchMap,
-} from 'rxjs';
+import { Validators, FormBuilder } from '@angular/forms';
+import { Observable, map } from 'rxjs';
 import { User } from '../model/user.model';
 import { UserService } from '../shared/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { FormValidators } from '../helpers/form-validators';
 
 @Component({
   selector: 'app-account-wizard',
@@ -44,7 +33,7 @@ export class AccountWizardComponent {
       '',
       {
         validators: [Validators.required],
-        asyncValidators: [userNameValidator(this.userService)],
+        asyncValidators: [FormValidators.userNameValidator(this.userService)],
         updateOn: 'change',
       },
     ],
@@ -134,30 +123,4 @@ export class AccountWizardComponent {
       })
       .catch((err) => console.log(err));
   }
-}
-
-export function userNameValidator(userService: UserService): AsyncValidatorFn {
-  return (control: AbstractControl): any => {
-    return control.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap((userName) =>
-        userService
-          .getUserByName(userName)
-          .then(
-            (fbUser) =>
-              fbUser === null || fbUser === undefined || fbUser.length === 0
-          )
-          .catch(() => false)
-      ),
-      map((isValid: boolean) =>
-        isValid
-          ? null
-          : {
-              duplicateUser: true,
-            }
-      ),
-      first()
-    );
-  };
 }
