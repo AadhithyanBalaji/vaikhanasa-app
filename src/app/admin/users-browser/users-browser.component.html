@@ -1,1 +1,13 @@
-<p>users-browser works!</p>
+<div class="p-15">
+    <h4>Pending Users</h4>
+    <mat-list-item *ngFor="let user of pendingUsers">
+        <div matListItemTitle>{{user.userName}}</div>
+        <button mat-button class="pull-right" (click)="updateUserStatus(user, true)">Approve</button>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <h4>Active Users</h4>
+    <mat-list-item *ngFor="let user of activeUsers">
+        <div matListItemTitle>{{user.userName}}</div>
+        <button mat-button class="pull-right" (click)="updateUserStatus(user, false)">Deactivate</button>
+    </mat-list-item>
+</div>
