@@ -8,7 +8,15 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
   private readonly sAuthenticatedKey = 'userInfo';
-  userCache$ = new BehaviorSubject<UserCache>(new UserCache());
+  userCache$: BehaviorSubject<UserCache>;
+
+  constructor() {
+    const userCacheJson = sessionStorage.getItem(this.sAuthenticatedKey);
+    const userCache = userCacheJson
+      ? JSON.parse(userCacheJson)
+      : new UserCache();
+    this.userCache$ = new BehaviorSubject<UserCache>(userCache);
+  }
 
   public login(savedUser: User) {
     const userCache = new UserCache(
