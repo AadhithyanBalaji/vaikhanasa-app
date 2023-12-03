@@ -23,6 +23,13 @@
                         <input matInput formControlName="dob" placeholder="dd/mm/yyyy" required>
                     </mat-form-field>
                     <mat-form-field>
+                        <mat-label>Gender</mat-label>
+                        <mat-select formControlName="gender" name="gender" required>
+                            <mat-option *ngFor="let gender of genders"
+                                [value]="gender.id">{{gender.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
                         <mat-label>Gothram</mat-label>
                         <mat-select formControlName="clanId" name="clan" required>
                             <mat-option *ngFor="let clan of clans" [value]="clan.id">{{clan.name}}</mat-option>

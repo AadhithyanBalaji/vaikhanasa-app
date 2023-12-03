@@ -4,6 +4,7 @@ export class User {
   firstName!: string;
   lastName!: string;
   dob!: Date;
+  gender!: number;
   clanId!: number;
   relationShipStatus!: number;
 

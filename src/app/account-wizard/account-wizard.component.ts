@@ -30,6 +30,7 @@ export class AccountWizardComponent implements OnInit {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     dob: ['', Validators.required],
+    gender: [NaN, Validators.required],
     clanId: new FormControl(),
     relationShipStatus: new FormControl(NaN, Validators.required),
   });
@@ -69,6 +70,12 @@ export class AccountWizardComponent implements OnInit {
     { id: 6, name: 'Vasishta' },
     { id: 7, name: 'Vishwamitra' },
   ];
+
+  genders = [
+    { id: 1, name: 'Male' },
+    { id: 2, name: 'Female' },
+  ];
+
   userName: string = '';
   mode: string = '';
   constructor(
@@ -117,6 +124,7 @@ export class AccountWizardComponent implements OnInit {
         firstName: f1.firstName!,
         lastName: f1.lastName!,
         dob: dateObject,
+        gender: f1.gender!,
         clanId: f1.clanId!,
         relationShipStatus: f1.relationShipStatus!,
 
@@ -175,6 +183,7 @@ export class AccountWizardComponent implements OnInit {
           firstName: savedUser.firstName,
           lastName: savedUser.lastName,
           dob: savedUser.dob.toString(),
+          gender: savedUser.gender,
           clanId: +savedUser.clanId,
           relationShipStatus: savedUser.relationShipStatus,
         });
@@ -183,7 +192,7 @@ export class AccountWizardComponent implements OnInit {
           lat: savedUser?.address?.lat,
           lng: savedUser.address?.lng,
           contactNumber: savedUser.contactNumber,
-          phoneNumber: savedUser.contactNumber,
+          phoneNumber: savedUser.phoneNumber,
         });
 
         this.thirdFormGroup.patchValue({
