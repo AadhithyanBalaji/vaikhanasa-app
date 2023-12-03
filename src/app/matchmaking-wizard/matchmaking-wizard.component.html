@@ -1,1 +1,28 @@
-<p>matchmaking-wizard works!</p>
+<div class="p-15">
+    <div>
+        <form [formGroup]="form">
+            <div class="form-fields-container">
+                <mat-form-field>
+                    <mat-label>User name</mat-label>
+                    <input matInput formControlName="userName" placeholder="User name" required>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Age gap</mat-label>
+                    <input matInput formControlName="ageGap" type="number" step="1" placeholder="Age gap" required>
+                </mat-form-field>
+                <button mat-flat-button color="primary" (click)="getMatches()">Find matches</button>
+            </div>
+        </form>
+    </div>
+    <div class="match-results-container">
+        <mat-list-item *ngFor="let user of matchingUsers">
+            <div matListItemTitle>{{user.firstName}} {{user.lastName}}</div>
+            <div class="ac g-15">
+                <span>{{user.gender === 1 ? "M" : "F"}}</span>
+                <span>{{user.addressInfo?.lat}}</span>
+                <span>{{user.contactNumber}}</span>
+            </div>
+        </mat-list-item>
+        <h3 *ngIf="form.dirty && form.valid && matchingUsers.length === 0">No matches found</h3>
+    </div>
+</div>
