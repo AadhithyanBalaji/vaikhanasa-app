@@ -16,14 +16,9 @@ export class FormValidators {
       return control.valueChanges.pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((userName) =>
-          userService
-            .getUserByName(userName)
-            .then((fbUser) => fbUser === null)
-            .catch(() => false)
-        ),
-        map((isValid: boolean) =>
-          isValid
+        switchMap((userName) => userService.getUserByName(userName)),
+        map((fbUser: User | null) =>
+          fbUser === null
             ? null
             : {
                 duplicateUser: true,
@@ -39,12 +34,7 @@ export class FormValidators {
       return formGroup.valueChanges.pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((formValue) =>
-          userService
-            .getUserByName(formValue.userName)
-            .then((fbUser) => fbUser)
-            .catch(() => null)
-        ),
+        switchMap((formValue) => userService.getUserByName(formValue.userName)),
         map((fbUser: User | null) => {
           const formUserName = formGroup.value.userName;
           const formPassword = formGroup.value.password;

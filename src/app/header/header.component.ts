@@ -3,8 +3,7 @@ import { AuthService } from '../shared/auth.service';
 import { Router } from '@angular/router';
 import { UserCache } from '../shared/user-cache.model';
 import { UserService } from '../shared/user.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { Observable, map } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { ViewPortService } from '../shared/viewport.service';
 
 @Component({
@@ -27,13 +26,18 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const userCache = this.authService.loggedInUserInfo;
-    this.userService.getUserByName(userCache.userName).then((loggedInUser) => {
-      this.displayName = loggedInUser
-        ? `${loggedInUser.firstName} ${loggedInUser.lastName}`
-        : '';
-      this.isAdmin = loggedInUser?.isAdmin ?? false;
-    });
+    this.authService.userCache$
+      .pipe(
+        switchMap((userCache: UserCache) =>
+          this.userService.getUserByName(userCache?.userName)
+        )
+      )
+      .subscribe((loggedInUser) => {
+        this.displayName = loggedInUser
+          ? `${loggedInUser.firstName} ${loggedInUser.lastName}`
+          : '';
+        this.isAdmin = loggedInUser?.isAdmin ?? false;
+      });
   }
 
   logOut() {

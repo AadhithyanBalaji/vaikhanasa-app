@@ -60,7 +60,7 @@ export class LoginComponent {
     const userName = this.loginForm.controls.userName.value!;
     const password = this.loginForm.controls.password.value!;
     this.loading = true;
-    this.firebaseService.getUserByName(userName).then((savedUser) => {
+    this.firebaseService.getUserByName(userName).subscribe((savedUser) => {
       savedUser = savedUser!;
       if (savedUser.password === password) {
         this.authService.login(savedUser);

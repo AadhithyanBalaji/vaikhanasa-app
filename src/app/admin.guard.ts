@@ -13,6 +13,6 @@ export class AdminGuard implements CanActivate {
   constructor(private readonly authService: AuthService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.authService.isAdmin;
+    return this.authService.userCache$.getValue()?.isAdmin ?? false;
   }
 }

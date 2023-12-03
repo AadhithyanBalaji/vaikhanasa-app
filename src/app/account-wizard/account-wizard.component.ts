@@ -166,7 +166,7 @@ export class AccountWizardComponent implements OnInit {
   private buildForm(userName: string) {
     this.thirdFormGroup.controls.userName.setValue(userName);
     if (!this.thirdFormGroup.controls.userName.errors) {
-      this.userService.getUserByName(userName).then((savedUser) => {
+      this.userService.getUserByName(userName).subscribe((savedUser) => {
         if (savedUser == null) {
           return;
         }
@@ -197,6 +197,7 @@ export class AccountWizardComponent implements OnInit {
         FormValidators.userNameValidator(this.userService)
       );
     }
+    this.thirdFormGroup.controls.userName.setValue(null, { emitEvent: false });
   }
 
   private createUserAccount(user: User) {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { where } from '@angular/fire/firestore';
 import { FirebaseCollectionsBaseService } from './firebase-collections-base.service';
 import { User } from '../model/user.model';
+import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -21,14 +22,16 @@ export class UserService {
     this.apiService.updateUserStatus(user, status);
   }
 
-  async getUserByName(userName: string) {
+  getUserByName(userName: string) {
     const filter = where('userName', '==', userName);
-    return this.apiService
-      .getDocByQuery(filter)
-      .then((data) =>
-        data !== null && data !== undefined && data.length > 0
-          ? (data[0] as User)
-          : null
-      );
+    return from(
+      this.apiService
+        .getDocByQuery(filter)
+        .then((data) =>
+          data !== null && data !== undefined && data.length > 0
+            ? (data[0] as User)
+            : null
+        )
+    );
   }
 }

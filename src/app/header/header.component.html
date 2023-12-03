@@ -1,4 +1,4 @@
-<p *ngIf="authService.isAuthenticated; else anonymousHeader">
+<p *ngIf="authService.userCache$?.getValue()?.isAuthenticated; else anonymousHeader">
     <mat-toolbar class="desktop-toolbar" *ngIf="!(isMobile | async); else mobileToolbarTemplate">
         <span>Vaikhanasa</span>
         <span class="example-spacer"></span>
