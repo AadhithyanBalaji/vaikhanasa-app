@@ -1,4 +1,7 @@
 <div class="p-15">
+    <div class="row">
+        <button mat-flat-button color="primary" class="pull-right" routerLink="../user/0/userMgmt">Add new user</button>
+    </div>
     <h4>Pending Users</h4>
     <mat-list-item *ngFor="let user of pendingUsers">
         <div matListItemTitle>{{user.userName}}</div>

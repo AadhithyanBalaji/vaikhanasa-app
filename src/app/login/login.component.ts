@@ -51,10 +51,6 @@ export class LoginComponent {
     return this.loginForm.dirty && this.loginForm.valid;
   }
 
-  initiateNewAccount() {
-    this.router.navigate([`../user/0`]);
-  }
-
   forgotPassword() {
     alert('to do: navigate to reset password');
   }

@@ -11,7 +11,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'user/:id', component: AccountWizardComponent },
+  { path: 'user/:id/:mode', component: AccountWizardComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',

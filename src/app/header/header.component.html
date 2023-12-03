@@ -37,11 +37,10 @@
             <mat-icon>menu</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <span>Home</span>
+            <button mat-menu-item routerLink="/home" routerLinkActive="active-link"
+                [routerLinkActiveOptions]="{exact: true}">Home
             </button>
-            <button mat-menu-item>
-                <span>Matrimony</span>
+            <button mat-menu-item routerLink="matrimony" routerLinkActive="active-link"> Matrimony
             </button>
             <button *ngIf="isAdmin" mat-menu-item [matMenuTriggerFor]="adminMenu" aria-label="header menu options">
                 <mat-icon>shield_lock</mat-icon>
@@ -59,8 +58,8 @@
         </mat-menu>
 
         <mat-menu #adminMenu="matMenu">
-            <button mat-menu-item>
-                <span>User Management</span>
+            <button mat-menu-item mat-menu-item routerLink="users" routerLinkActive="active-link">
+                User Management
             </button>
         </mat-menu>
 

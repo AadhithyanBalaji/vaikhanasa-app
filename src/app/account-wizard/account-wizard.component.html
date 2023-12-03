@@ -1,5 +1,10 @@
 <div class="p-15">
-    <h3>Please provide the following information to create your account</h3>
+    <div class="ac g-15">
+        <button mat-icon-button (click)="navigateBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h3 style="margin: 0">Please provide the following information to create your account</h3>
+    </div>
     <mat-stepper #stepper [orientation]="'vertical'">
         <mat-step [stepControl]="firstFormGroup" errorMessage="Missing/Invalid in information provided">
             <form [formGroup]="firstFormGroup">

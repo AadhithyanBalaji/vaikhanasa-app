@@ -21,6 +21,15 @@ body {
   justify-content: center;
 }
 
+.ac{
+  display: flex;
+  align-items: center;
+}
+
+.g-15{
+  gap: 15px;
+}
+
 .p-15 {
   padding: 15px !important;
 }

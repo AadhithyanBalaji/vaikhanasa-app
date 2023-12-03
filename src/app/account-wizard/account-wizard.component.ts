@@ -5,12 +5,14 @@ import {
 } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Observable, map, of } from 'rxjs';
+import { Observable, map, of, take } from 'rxjs';
 import { User } from '../model/user.model';
 import { UserService } from '../shared/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormValidators } from '../helpers/form-validators';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent } from '../shared/modal.component';
 
 @Component({
   selector: 'app-account-wizard',
@@ -67,14 +69,16 @@ export class AccountWizardComponent implements OnInit {
     { id: 6, name: 'Vasishta' },
     { id: 7, name: 'Vishwamitra' },
   ];
-  userName: any;
+  userName: string = '';
+  mode: string = '';
   constructor(
     private readonly _formBuilder: FormBuilder,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly userService: UserService,
     private readonly snackBar: MatSnackBar,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +88,7 @@ export class AccountWizardComponent implements OnInit {
 
     this.route.params.subscribe((params) => {
       const userName = params['id'];
+      this.mode = params['mode'];
       this.buildForm(userName);
     });
   }
@@ -133,6 +138,31 @@ export class AccountWizardComponent implements OnInit {
     }
   }
 
+  navigateBack() {
+    if (
+      this.firstFormGroup.dirty ||
+      this.secondFormGroup.dirty ||
+      this.thirdFormGroup.dirty
+    ) {
+      this.dialog
+        .open(ModalComponent, {
+          data: {
+            title: 'Confirm unsaved changes',
+            body: `Are you sure you want to discard the changes done?`,
+          },
+        })
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe((result) => (result ? this.return() : null));
+    } else {
+      this.return();
+    }
+  }
+
+  private return() {
+    this.router.navigate([this.mode === 'userMgmt' ? 'users' : 'login']);
+  }
+
   private buildForm(userName: string) {
     this.thirdFormGroup.controls.userName.setValue(userName);
     if (!this.thirdFormGroup.controls.userName.errors) {
@@ -173,7 +203,7 @@ export class AccountWizardComponent implements OnInit {
     this.userService
       .createUser(user)
       .then((_) => {
-        this.router.navigate([`../..`]);
+        this.router.navigate([this.mode === 'userMgmt' ? `users` : `home`]);
       })
       .catch((err) => console.log(err));
   }

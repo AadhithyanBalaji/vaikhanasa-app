@@ -48,6 +48,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ModalComponent } from './modal.component';
 
 const materialModules = [
   MatAutocompleteModule,
@@ -84,7 +85,7 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [ModalComponent],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -139,6 +140,7 @@ const materialModules = [
     ScrollingModule,
     DialogModule,
     NgxMatSelectSearchModule,
+    ModalComponent,
     ...materialModules,
   ],
 })
